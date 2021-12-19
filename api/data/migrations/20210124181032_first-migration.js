@@ -17,13 +17,13 @@ exports.up = async (knex) => {
     .createTable('plants', (table) => {
       table.increments('plant_id')
       table.string('plant_nickname', 200).notNullable() // <<< Unique ???
-      table.string('user_id', 200)
+      table.integer('user_id', 200)
         .notNullable()
         .unsigned()
         .references('user_id')
         .inTable('users')
         .onDelete('RESTRICT')
-      table.string('species_id', 200)
+      table.integer('species_id', 200)
         .notNullable()
         .unsigned()
         .references('species_id')
