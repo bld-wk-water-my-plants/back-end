@@ -6,15 +6,15 @@ const { checkPlantInfo } = require('./plant-middleware');
 // ----- ROUTES -----
 // Get all plants in DB
 // FOR TESTING ONLY - REMOVE BEFORE FINALIZED
-/*router.get('/', (req, res, next) => {
+router.get('/', (req, res, next) => {
     Plant.findAll()
         .then( response => {
             res.status(200).json(response)
         })
         .catch( next );
-})*/
+})
 
-// Get plants by user id
+// Get plants by user id - OKAY
 router.get('/:user_id', (req, res, next) => {
     const { user_id } = req.params
     Plant.findByFilter({user_id})
@@ -23,6 +23,9 @@ router.get('/:user_id', (req, res, next) => {
         })
         .catch( next );
 })
+
+
+
 
 // Add a plant w. user id 
 router.post('/:user_id', checkPlantInfo, (req, res, next) => {
