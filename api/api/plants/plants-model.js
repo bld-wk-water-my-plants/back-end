@@ -16,21 +16,34 @@ async function findByFilter (filter){  // Var must be object w. key matching db 
     return plants;
 }
 
+
+
 async function createPlant (user_id, plant){
-    const [newPlant] = await db('plants').insert(plant).where({user_id});
+    const [newPlant] = await db('plants')
+        .insert(plant)
+        .where({user_id});
+    
     console.log('NEW PLANT: ', newPlant); // <<<<<<<<<<<<<<<<<<<< What is returned?
     return newPlant;
 }
 async function updatePlant (plant){
-    const [updatedPlant] = await db('plants').update(plant).where('plant_id', plant.plant_id);
+    const [updatedPlant] = await db('plants')
+        .update(plant)
+        .where('plant_id', plant.plant_id);
+    
     console.log('UPDATED PLANT: ', updatedPlant); // <<<<<<<<<<<<<<<<<<<< What is returned?
     return updatedPlant;
 }
 async function deletePlant (plant_id){
-    const [deletedPlant] = await db('plants').delete().where({plant_id});
+    const [deletedPlant] = await db('plants')
+        .delete()
+        .where({plant_id});
+    
     console.log('DELETED PLANT: ', deletedPlant); // <<<<<<<<<<<<<<<<<<<< What is returned?
     return deletedPlant;
 }
+
+
 
 module.exports = {
     findAll,
