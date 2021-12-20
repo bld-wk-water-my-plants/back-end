@@ -10,40 +10,63 @@ const BCRYPTJS_ROUNDS = 8;
 // Import jsonwebtoken, jwt secret, and token builder
 // const jwt = require('jsonwebtoken'); // Not needed since the token isn't created and decoded here
 const { JWT_SECRET } = require('./secret')
-const tokenBuiler = require('./auth-helpers');
+const tokenBuilder = require('./auth-helpers');
 
 // Import auth middleware
 const { restricted, checkUnPwdPhoneProvided, checkIfUnTaken, checkIfPhoneTaken, checkUnPwdProvided, checkIfUnExists,} = require('./auth-middleware')
 
+// READ ME
+// REGISTER: [POST] ('/api/auth/register') 
+// Body: { username, password, phone_number } <- All strings; phone_number format ###-###-####
+// Returns: { user_id, username, phone_number }
 
-// ----- END POINTS ----- 
-// REGISTER
-// Call middleware to check un / pwd  -> Error msgs
-// Hash pwd -> Pass un + hash to db
-// Respond w. 201
+// LOGIN: [POST] ('/api/auth/login') 
+// Body: { username, password } <- All strings
+// Returns: { user_id, token }
+
+// UPDATE: [PUT] ('/api/auth/update') 
+// Body: { user_id, password, phone_number } <- user_id is an integer; password & phone_number are strings; phone_number format ###-###-####
+// Returns: { user_id, phone_number }
+
 router.post('/register', checkUnPwdPhoneProvided, checkIfUnTaken, checkIfPhoneTaken, (req, res, next) => {
-    res.send('<h1>REGISTER!</h1>')
+    const user = req.body;
+    user.password = bcryptjs.hashSync(user.password, BCRYPTJS_ROUNDS);
+    User.create(user)
+        .then( response => {
+            res.status(201).json(response)
+        })
+        .catch( next );
 })
 
-
-// LOGIN
-// Call middleware to check un / pwd  -> Error msgs
-// Check if name exists in the DB and if it does, hash provided pwd and compare to db
-// If pwd match, call token builder and pass back token
-// If pwd doesn't match, Error: { status: 401, message: 'Invalid Credentials' 
 router.post('/login', checkUnPwdProvided, checkIfUnExists, (req, res, next) => {
-    res.send('<h1>LOGIN!</h1>')
+    const {username, password} = req.body;
+    User.findByFilter( {username} ) // REMEMBER: Pass username variable as an object
+        .then( ([userFromDb]) => {
+            if (bcryptjs.compareSync(password, userFromDb.password)){
+                const token = tokenBuilder(userFromDb);
+                res.status(200).json({ user_id: userFromDb.user_id, token: token });
+            } else {
+                next({ status: 401, message: 'invalid credentials'})
+            }
+        })
+        .catch( next );
 
 })
+
+
 
 // UPDATE
-// After login - restricted <<<<<<<<<<<<<< ???????? Prevent need to check for un and pwd
-// Validate token -> Pull u_id and un
-// Call middleware to check if phone already exists --> error msg
 // Hash pwd -> Pass un + hash to db
 // Call token builder and pass token back
 router.put('/update', restricted, checkIfPhoneTaken, (req, res, next) => {
-    res.send('<h1>LOGIN!</h1>')
+    const user = req.body;
+    console.log('1. Router - User: ', user);
+    User.update(user)
+        .then( response => {
+            res.status(200).json(response);
+        })
+        .catch( next );
+
 
 })
 
