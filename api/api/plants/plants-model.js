@@ -3,20 +3,20 @@ const db = require('../../data/db-config');
 function findAll () {
     return db('plants')
 }
-function findById (id){
-    return db('plants').where('id', id)
+function findById (plant_id){
+    return db('plants').where({plant_id})
 }
-function findByFilter (filter){ 
+function findByFilter (filter){  // REMEMBER: Variable name must match table field name
     return db('plants').where({filter})
 }
 
-async function createPlant (plant){
-    const [newPlant] = await db('plants').insert(plant);
+async function createPlant (user_id, plant){
+    const [newPlant] = await db('plants').insert(plant).where({user_id});
     console.log('NEW PLANT: ', newPlant); // <<<<<<<<<<<<<<<<<<<< What is returned?
     return newPlant;
 }
-async function updatePlant (id, plant){
-    const [updatedPlant] = await db('plants').update(plant).where('plant_id', id);
+async function updatePlant (plant){
+    const [updatedPlant] = await db('plants').update(plant).where('plant_id', plant.plantId);
     console.log('UPDATED PLANT: ', updatedPlant); // <<<<<<<<<<<<<<<<<<<< What is returned?
     return updatedPlant;
 }
