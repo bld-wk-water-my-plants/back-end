@@ -13,16 +13,13 @@ async function findByFilter (filter) {
 
 async function create(user) {
   const [newUser] = await db('users')
-  .insert(user, ['user_id', 'username', 'phone_number']);
+    .insert(user, ['user_id', 'username', 'phone_number']);
   return newUser;
 }
-
-function update(user){
-  console.log('2. Model - User: ', user);
-  const [updatedUser] =  db('users')
-    .update({password: user.password, phone_number: user.phone_number}, ['password', 'phone_number'])
-    // .update('password', user.password, 'phone_number', user.phone_number, ['password', 'phone_number'])
-    .where('user_id', user.user_id);
+async function update(user_id, updates){
+  const [updatedUser] = await db('users')
+    .update(updates, ['user_id', 'phone_number'])
+    .where('user_id', user_id);
   return updatedUser;
 }
 

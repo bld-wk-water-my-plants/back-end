@@ -1,11 +1,23 @@
 // ----- IMPORTS -----
 const User = require('../users/users-model');
-const jwt = require('jsonwebtoken'); // Needed for restrict
+const jwt = require('jsonwebtoken'); // Needed for restricted
+const { JWT_SECRET } = require('./secret')
+
 
 // NON-AUTH ROUTES
 function restricted (req, res, next) {
-    console.log('\nrestricted');
-    next();
+    const token = req.headers.authorization;
+    if (!token) {
+        return next({ status: 401, message: "Token required" })
+    } else {
+        jwt.verify(token, JWT_SECRET, (err, decoded) => {
+            if (err){
+                return next({ status: 401, message: "Token invalid" })
+            } 
+            req.decoded = decoded;
+            next();
+        })
+    }
 }
 
 // REGISTER CHECKS
