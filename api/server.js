@@ -10,21 +10,18 @@ const authRouter = require('./api/auth/auth-router');
 const plantRouter = require('./api/plants/plants-router');
 
 
-// ----- SET UP SERVER & ROUTES
+// ----- SERVER & ROUTERS -----
 const server = express()
 server.use(express.json())
 server.use(helmet())
 server.use(cors())
 
-// ADD ROUTER <<<<<<<<<<
 server.use('/api/auth', authRouter);
-// server.use('/api/plants', restricted, plantRouter);
-server.use('/api/plants', plantRouter); // <<<< ADD RESTRICTED ONCE AUTH IS DONE
+server.use('/api/plants', plantRouter); // <<<< ADD RESTRICTED MIDDLEWARE ONCE FRONT END REG/lOGIN COMPLETE
 
 server.get('/', (req, res) => {
   res.send('<h1>Hooray! You found us!</h1>')
 })
-
 
 server.use((err, req, res, next) => { 
   res.status(err.status || 500).json({

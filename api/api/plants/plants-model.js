@@ -1,13 +1,19 @@
 const db = require('../../data/db-config');
 
-function findAll () {
-    return db('plants');
+// Get all plants
+async function findAll () {
+    const allPlants = await db('plants as p')
+        .join('species as s', 'p.species_id', 's.species_id')
+        .select('p.plant_id', 'p.plant_nickname', 's.species_name', 's.h2o_frequency', 's.image' )
+    return allPlants;
 }
-function findById (plant_id){
-    return db('plants').where({plant_id});
-}
-function findByFilter (filter){  // REMEMBER: Variable name must match table field name
-    return db('plants').where({filter});
+// Get by user_name (or other field)
+async function findByFilter (filter){  // Var must be object w. key matching db field name
+    const plants = await db('plants as p')
+        .join('species as s', 'p.species_id', 's.species_id')
+        .select('p.plant_id', 'p.plant_nickname', 's.species_name', 's.h2o_frequency', 's.image' )
+        .where(filter)
+    return plants;
 }
 
 async function createPlant (user_id, plant){
@@ -28,7 +34,6 @@ async function deletePlant (plant_id){
 
 module.exports = {
     findAll,
-    findById,
     findByFilter,
     createPlant,
     updatePlant,

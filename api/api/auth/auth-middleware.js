@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken'); // Needed for restricted
 const { JWT_SECRET } = require('./secret')
 
 
-// NON-AUTH ROUTES
+// ----- NON-AUTH ROUTES -----
 function restricted (req, res, next) {
     const token = req.headers.authorization;
     if (!token) {

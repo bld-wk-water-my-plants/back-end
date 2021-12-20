@@ -4,28 +4,43 @@ const Plant = require('./plants-model');
 const { checkPlantInfo } = require('./plant-middleware');
 
 // ----- ROUTES -----
-// Get all plants in DB
+// Get all plants in DB -- FOR TESTING ONLY - REMOVE BEFORE FINALIZED
 router.get('/', (req, res, next) => {
-    res.send('<h1>ALL PLANTS</h1>')
+    Plant.findAll()
+        .then( response => {
+            res.status(200).json(response)
+        })
+        .catch( next );
 })
 
 // Get plants by user id
-router.get('/:id', (req, res, next) => {
-    res.send('<h1>GET PLANTS BY USER ID</h1>')
+router.get('/:user_id', (req, res, next) => {
+    const { user_id } = req.params
+    Plant.findByFilter({user_id})
+        .then( response => {
+            res.status(200).json(response)
+        })
+        .catch( next );
 })
 
-// Add a plant w. user id <<< ??? (user info stored in token?)
-router.post('/:id', checkPlantInfo, (req, res, next) => {
-    res.send('<h1>ADD PLANTS TO USER ID</h1>')
+// Add a plant w. user id 
+router.post('/:user_id', checkPlantInfo, (req, res, next) => {
+    const {user_id} = req.params;
+    const plant = req.body;
+    Plant.createPlant(user_id, plant)
+        .then( response => {
+            res.status(201).json(response)
+        })
+        .catch( next );
 })
 
 // Update a plant w. plant id (user id not needed)
-router.put('/:id', checkPlantInfo, (req, res, next) => {
+router.put('/:plant_id', checkPlantInfo, (req, res, next) => {
     res.send('<h1>UPDATE PLANT BY PLANT ID</h1>')
 })
 
 // Delete a plant w. plant id (user id not needed)
-router.delete('/:id', (req, res, next) => {
+router.delete('/:plant_id', (req, res, next) => {
     res.send('<h1>DELETE PLANT BY PLANT ID</h1>')
 })
 

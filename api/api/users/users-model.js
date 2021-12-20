@@ -7,7 +7,7 @@ function findAll() {
 function findById (id) {
   return db('users').where('id', id)
 }
-async function findByFilter (filter) { 
+async function findByFilter (filter) {  // Var must be object w. key matching db field name
   return await db('users').where(filter);
 }
 
