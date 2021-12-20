@@ -23,7 +23,7 @@ async function createPlant (user_id, plant){
         .insert(plant)
         .where({user_id});
     
-    console.log('NEW PLANT: ', newPlant); // <<<<<<<<<<<<<<<<<<<< What is returned?
+    console.log('NEW PLANT: ', newPlant); // <<<<<<<<<<<< What is returned?
     return newPlant;
 }
 async function updatePlant (plant){
@@ -31,7 +31,7 @@ async function updatePlant (plant){
         .update(plant)
         .where('plant_id', plant.plant_id);
     
-    console.log('UPDATED PLANT: ', updatedPlant); // <<<<<<<<<<<<<<<<<<<< What is returned?
+    console.log('UPDATED PLANT: ', updatedPlant); // <<<<<<<<<<< What is returned?
     return updatedPlant;
 }
 async function deletePlant (plant_id){
@@ -39,7 +39,7 @@ async function deletePlant (plant_id){
         .delete()
         .where({plant_id});
     
-    console.log('DELETED PLANT: ', deletedPlant); // <<<<<<<<<<<<<<<<<<<< What is returned?
+    console.log('DELETED PLANT: ', deletedPlant); // <<<<<<<<<< What is returned?
     return deletedPlant;
 }
 

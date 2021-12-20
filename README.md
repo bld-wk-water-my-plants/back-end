@@ -66,4 +66,35 @@
 * Returns: { user_id, phone_number }
 
 ### Plant End Points ##
-...
+
+##### Get All (temporary endpoint for dev and test)
+* Method: GET
+* URL: '/api/plants/' 
+* Requires:  
+* Returns: { plant_id, plant_nickname, species_name, h2o_frequency, image )}
+
+##### Get By User ID
+* Method: GET
+* URL: '/api/plants/:user_id' 
+* Requires: user_id (nothing in the body, just in the URL param)  
+* Returns: { plant_id, plant_nickname, species_name, h2o_frequency, image )}
+
+--- MORE TO COME ---
+
+##### Create Plant w. User ID
+*
+*
+*
+*
+
+##### Update Plant w. Plant ID
+*
+*
+*
+*
+
+##### Delete Plant w. Plant ID
+*
+*
+*
+*
