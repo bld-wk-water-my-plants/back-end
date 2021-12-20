@@ -18,7 +18,8 @@ server.use(cors())
 
 // ADD ROUTER <<<<<<<<<<
 server.use('/api/auth', authRouter);
-server.use('/api/plant', restricted, plantRouter);
+// server.use('/api/plants', restricted, plantRouter);
+server.use('/api/plants', plantRouter); // <<<< ADD RESTRICTED ONCE AUTH IS DONE
 
 server.get('/', (req, res) => {
   res.send('<h1>Hooray! You found us!</h1>')
