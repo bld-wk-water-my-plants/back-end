@@ -32,7 +32,7 @@ router.post('/login', checkUnPwdProvided, checkIfUnExists, (req, res, next) => {
         .then( ([userFromDb]) => {
             if (bcryptjs.compareSync(password, userFromDb.password)){
                 const token = tokenBuilder(userFromDb);
-                res.status(200).json({ user_id: userFromDb.user_id, username: userFromDb.user_id, token: token });
+                res.status(200).json({ user_id: userFromDb.user_id, username: userFromDb.username, token: token });
             } else {
                 next({ status: 401, message: 'invalid credentials'})
             }
