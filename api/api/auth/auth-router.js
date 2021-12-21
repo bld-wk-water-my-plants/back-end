@@ -15,6 +15,8 @@ const tokenBuilder = require('./auth-helpers');
 // Import auth middleware
 const { restricted, checkUnPwdPhoneProvided, checkIfUnTaken, checkIfPhoneTaken, checkUnPwdProvided, checkIfUnExists,} = require('./auth-middleware')
 
+
+// ----- ROUTES -----
 router.post('/register', checkUnPwdPhoneProvided, checkIfUnTaken, checkIfPhoneTaken, (req, res, next) => {
     const user = req.body;
     user.password = bcryptjs.hashSync(user.password, BCRYPTJS_ROUNDS);
@@ -24,7 +26,6 @@ router.post('/register', checkUnPwdPhoneProvided, checkIfUnTaken, checkIfPhoneTa
         })
         .catch( next );
 })
-
 router.post('/login', checkUnPwdProvided, checkIfUnExists, (req, res, next) => {
     const {username, password} = req.body;
     User.findByFilter( {username} ) // REMEMBER: Pass username variable as an object
@@ -39,7 +40,7 @@ router.post('/login', checkUnPwdProvided, checkIfUnExists, (req, res, next) => {
         .catch( next );
 
 })
-
+// Note: no ':user_id' in the url, add user_id to the user object
 router.put('/update/', restricted, checkIfPhoneTaken, (req, res, next) => {
     const user = req.body
     const {user_id} = user;
