@@ -20,35 +20,64 @@ function restricted (req, res, next) {
     }
 }
 
-// REGISTER CHECKS
-// next({ status: 401, message: "username and password required"})
+// ----- REGISTER ONLY -----
 function checkUnPwdPhoneProvided (req, res, next) {
-    console.log('\ncheckUnPwdPhoneProvided');
-    next();
+    const { username, password, phone_number } = req.body;
+    if (username === undefined || password === undefined || phone_number === undefined){
+        next({ status: 401, message: "username, password, and valid phone number required" })
+    } else {
+        next();
+    }
 }
-// next({ status: 422, message: "username taken"})
 function checkIfUnTaken (req, res, next){
-    console.log('\ncheckIfUnTaken');
-    next();
+    const { username } = req.body;
+    User.findByFilter({username})
+        .then( ([response]) => {
+            if (!response){
+                next();
+            } else {
+                next({ status: 422, message: "username taken" })
+            }
+        })
+        .catch( next );
 }
 
-// REGISTRATION & LOGIN
-// next({ status: 422, message: "phone taken"})
+// ----- REGISTER & LOGIN -----
 function checkIfPhoneTaken (req, res, next){
-    console.log('\ncheckIfPhoneTaken');
-    next();
+    const { phone_number } = req.body;
+    User.findByFilter({phone_number})
+        .then( ([response]) => {
+            if (!response){
+                next();
+            } else {
+                next({ status: 422, message: "phone number taken" })
+            }
+        })
+        .catch( next );
+
 }
 
-// LOGIN ONLY
-// next({ status: 401, message: "username and password required"})
+// ----- LOGIN ONLY -----
 function checkUnPwdProvided (req, res, next) {
-    console.log('\ncheckUnPwdProvided');
-    next();
+    const { username, password } = req.body;
+    if (username === undefined || password === undefined){
+        next({ status: 401, message: "username and password required" })
+    } else {
+        next();
+    }
+
 }
-// next({ status: 401, message: "invalid credentials"})
 function checkIfUnExists (req, res, next){
-    console.log('\ncheckIfUnExists');
-    next();
+    const { username } = req.body;
+    User.findByFilter({username})
+        .then( ([response]) => {
+            if (response){
+                return next()
+            } else {
+                return next({ status: 422, message: "username not found" })
+            }
+        })
+        .catch( next);
 }
 
 
