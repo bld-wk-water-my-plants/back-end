@@ -1,11 +1,11 @@
 const db = require('../../data/db-config');
 
 
-function findAll() { 
-  return db('users') 
+async function findAll() { 
+  return await db('users') 
 }
-function findById (id) {
-  return db('users').where('id', id)
+async function findById (id) {
+  return await db('users').where('id', id)
 }
 async function findByFilter (filter) {  // Var must be object w. key matching db field name
   return await db('users').where(filter);
