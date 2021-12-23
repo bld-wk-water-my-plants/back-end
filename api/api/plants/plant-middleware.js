@@ -19,9 +19,11 @@ function checkIfSpeciesExists (req, res, next) {
     .then( ([species]) => {
         if(species){ // Found, return id
             req.species_id = species.species_id;
+            req.h2o_frequency = species.h2o_frequency;
             next();
         } else { // Not Found, return null
             req.species_id = null;
+            req.h2o_frequency = null;
             next()
         }
     })

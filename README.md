@@ -71,13 +71,13 @@
 * Method: GET
 * URL: '/api/plants/' 
 * Requires:  
-* Returns: { plant_id, plant_nickname, species_name, h2o_frequency, image )}
+* Returns: { plant_id, plant_nickname, species_name, h2o_frequency, image, species_id )}
 
 ##### Get By User ID
 * Method: GET
 * URL: '/api/plants/:user_id' 
 * Requires: user_id (nothing in the body, just in the URL param)  
-* Returns: { plant_id, plant_nickname, species_name, h2o_frequency, image )}
+* Returns: { plant_id, plant_nickname, species_name, h2o_frequency, image, species_id )}
 
 --- MORE TO COME ---
 

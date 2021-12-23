@@ -38,7 +38,8 @@ router.post('/:user_id', checkPlantInfoProvided, checkIfSpeciesExists, async (re
             h2o_frequency: plant.h2o_frequency 
         }
         try {
-            plant.species_id = await Plant.createSpecies(species);
+            const newSpecies = await Plant.createSpecies(species);
+            plant.species_id = newSpecies.species_id;
         } catch (error) {
             next(error)
         }
@@ -55,13 +56,77 @@ router.post('/:user_id', checkPlantInfoProvided, checkIfSpeciesExists, async (re
 
 
 // Update a plant w. plant id (user id not needed)
-router.put('/:plant_id', checkPlantInfoProvided, (req, res, next) => {
-    res.send('<h1>UPDATE PLANT BY PLANT ID</h1>')
+// { plant_id, plant_nickname, species_name, h2o_frequency, image (optional), species_id }
+router.put('/:plant_id', checkPlantInfoProvided, checkIfSpeciesExists, async (req, res, next) => {
+
+    // species_id is current id from body
+    const species = {
+        species_id: req.body.species_id,
+        species_name: req.body.species_name,
+        h2o_frequency: req.body.h2o_frequency
+    }
+    const plant = { 
+        plant_nickname: req.body.plant_nickname,
+        species_id: req.body.species_id,
+        plant_id: req.body.plant_id,
+    }
+
+    // if species_name exists, pull the species id and h2o
+        // if req.body.species_id === req.species_id -> update species table w. name & h2o
+        // if req.body.species_id !== req.species_id -> set species_id and update species table w. name & h2o
+    // if species_name null (does not exist)
+        // create new species w. name and h2o = return species_id and set plant.species_id
+
+    // species name has not changed, but h2o frequency has -> update 
+    console.log('\n\n')
+    console.log('A-body species id: ', species.species_id)
+    console.log('B-body species name: ', species.species_name)
+    console.log('C-body species h2o: ', species.h2o_frequency)
+    console.log('A-req species id: ', req.species_id)
+    console.log('B-req species name: ', req.species_name)
+    console.log('C-req species h2o: ', req.h2o_frequency)
+    console.log('\n\n')
+
+    // species name provided; FOUND in db; h2o changed; update species table
+    if ( species.species_id === req.species_id && species.h2o_frequency !== req.h2o_frequency ){
+        console.log('1-Existing species name provided, but new h20')
+        try {
+            const updatedSpecies = await Plant.updateSpecies(species);
+            plant.h2o_frequency = updatedSpecies.h2o_frequency;
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    // species name provided; NOT FOUND in db; create new species; add new species_id to plant obj
+    if (req.species_id === null){
+        console.log('2-New species name provided; NOT in db')
+        try {
+            const newSpecies = await Plant.createSpecies(species);
+            console.log('2A-new species: ', newSpecies)
+            plant.species_id = newSpecies.species_id;
+            console.log('2B-plant species id: ', plant.species_id)
+        } catch (error) {
+            next(error)
+        }      
+    } 
+
+    // species name provided; FOUND in db; species name changed; update species_id in plant obj
+    else if (plant.species_id !== req.species_id )  {
+        console.log('3-New species name provided; IN db') // <<<<<<<<<<<<<<<<<<<<<<
+        plant.species_id = req.species_id;
+    }
+
+    const updatedPlant = await Plant.updatePlant(plant);
+    res.status(200).json(updatedPlant);
+
 })
+
 
 // Delete a plant w. plant id (user id not needed)
 router.delete('/:plant_id', (req, res, next) => {
-    res.send('<h1>DELETE PLANT BY PLANT ID</h1>')
+    console.log('4-Delete') // <<<<<<<<<<<<<<<<<<<<<<
+    // Plant.deletePlant()
 })
 
 module.exports = router;
