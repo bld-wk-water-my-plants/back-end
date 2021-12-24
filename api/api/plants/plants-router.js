@@ -4,15 +4,6 @@ const Plant = require('./plants-model');
 const { checkPlantInfoProvided, checkIfSpeciesExists, } = require('./plant-middleware');
 
 // ----- ROUTES -----
-// Get all plants in DB
-// FOR TESTING ONLY - REMOVE BEFORE FINALIZED
-router.get('/', (req, res, next) => {
-    Plant.findAll()
-        .then( response => {
-            res.status(200).json(response)
-        })
-        .catch( next );
-})
 
 // Get plants by user id
 router.get('/:user_id', (req, res, next) => {
