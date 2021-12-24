@@ -52,12 +52,10 @@ async function updatePlant (plant){
 
 
 async function deletePlant (plant_id){
-    const [deletedPlant] = await db('plants')
-        .delete()
-        .where({plant_id});
-    
-    console.log('DELETED PLANT: ', deletedPlant); // <<<<<<<<<< What is returned?
-    return deletedPlant;
+    const deleted = await db('plants')
+    .delete()
+    .where({plant_id});
+    return deleted;
 }
 
 
