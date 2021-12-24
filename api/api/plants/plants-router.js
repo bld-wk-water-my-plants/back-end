@@ -73,15 +73,9 @@ router.put('/:plant_id', checkPlantInfoProvided, checkIfSpeciesExists, async (re
         species_id: req.body.species_id,
         plant_id: Number(req.params.plant_id),
     }
-    console.log('UPDATE: Plant: ', plant)
-    console.log('UPDATE: Species Body: ', species)
-    console.log('UPDATE: Middleware: species_id', req.species_id,)
-    console.log('UPDATE: Middleware: h2o', req.h2o_frequency)
-    console.log(`If: species.species_id: ${species.species_id} === req.species_id: ${req.species_id}`)
 
     // species name provided; FOUND in db; matches current species but h2o changed; update species table
     if ( species.species_id === req.species_id && species.h2o_frequency !== req.h2o_frequency ){
-        console.log('\n1 ------ Existing species name provided, but new h20 ------ ')
         try {
             const updatedSpecies = await Plant.updateSpecies(species);
             plant.h2o_frequency = updatedSpecies.h2o_frequency;
@@ -92,7 +86,6 @@ router.put('/:plant_id', checkPlantInfoProvided, checkIfSpeciesExists, async (re
 
     // species name provided; NOT FOUND in db; create new species; add new species_id to plant obj
     if (req.species_id === null){
-        console.log('\n2 ------ New species name provided; NOT in db ------ ') // <<<<<<<<<<<<<<<<
         try {
             const newSpecies = await Plant.createSpecies(species);
             console.log('2A-new species: ', newSpecies)
@@ -105,7 +98,6 @@ router.put('/:plant_id', checkPlantInfoProvided, checkIfSpeciesExists, async (re
 
     // species name provided; FOUND in db; species name changed; update species_id in plant obj
     else if (plant.species_id !== req.species_id )  {
-        console.log('\n3 ------ New species name provided; IN db ------ ') // <<<<<<<<<<<<<<<<<<<<<<
         plant.species_id = req.species_id;
     }
 
@@ -119,7 +111,6 @@ router.put('/:plant_id', checkPlantInfoProvided, checkIfSpeciesExists, async (re
 
 // Delete a plant w. plant id (user id not needed)
 router.delete('/:plant_id', (req, res, next) => {
-    console.log('4-Delete') // <<<<<<<<<<<<<<<<<<<<<<
     const plant_id = Number(req.params.plant_id)
     Plant.deletePlant(plant_id)
         .then( response => {

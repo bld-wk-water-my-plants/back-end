@@ -19,10 +19,8 @@ async function findByFilter (filter){
 
 // Creates a new species; returns ENTIRE NEW species as an object
 async function createSpecies (species){    
-    console.log('\nAA. Create Species: ', species)
     const [newSpecies] = await db('species')
         .insert([{species_name: species.species_name, h2o_frequency: species.h2o_frequency}], ['species_id', 'species_name', 'h2o_frequency']);
-    console.log('BB. Create Species: ', newSpecies)
     return newSpecies;
 }
 

@@ -17,7 +17,7 @@ server.use(helmet())
 server.use(cors())
 
 server.use('/api/auth', authRouter);
-server.use('/api/plants', restricted, plantRouter); // <<<< ADD RESTRICTED MIDDLEWARE ONCE FRONT END REG/lOGIN COMPLETE
+server.use('/api/plants', restricted, plantRouter); 
 
 server.get('/', (req, res) => {
   res.send('<h1>Hooray! You found us!</h1>')

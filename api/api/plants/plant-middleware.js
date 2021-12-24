@@ -3,8 +3,6 @@ const Plant = require('./plants-model');
 
 // CREATE AND UPDATE
 function checkPlantInfoProvided (req, res, next) {
-    console.log('\ncheckPlantInfo'); // <<<<<<<<<<<<<<<<<
-
     if ( req.body.plant_nickname === undefined ||
          req.body.species_name === undefined ||
          req.body.h2o_frequency === undefined ){
