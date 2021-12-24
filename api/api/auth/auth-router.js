@@ -9,7 +9,7 @@ const { BCRYPTJS_ROUNDS } = require('./secret');
 
 // Import jsonwebtoken, jwt secret, and token builder
 // const jwt = require('jsonwebtoken'); // Not needed since the token isn't created and decoded here
-const { JWT_SECRET } = require('./secret')
+// const { JWT_SECRET } = require('./secret') // Not needed since the token isn't created and decoded here
 const tokenBuilder = require('./auth-helpers');
 
 // Import auth middleware
